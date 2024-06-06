@@ -2,7 +2,7 @@ import requests
 import json
 import base64
 from datetime import datetime, timedelta
-import keys
+import config
 import jwt
 
 def access_token():
@@ -30,7 +30,7 @@ def lipa_na_mpesa():
     unformatted_time = datetime.now()
     formatted_time = unformatted_time.strftime("%Y%m%d%H%M%S")
 
-    data_to_encode = keys.BusinessShortCode + keys.Passkey + formatted_time
+    data_to_encode = config.BusinessShortCode + config.Passkey + formatted_time
     encoded = base64.b64encode(data_to_encode.encode()).decode('utf-8')
     # Generate the JWT token
     jwt_token = generate_jwt_token()
@@ -43,14 +43,14 @@ def lipa_na_mpesa():
     }
 
     payload = {
-        "BusinessShortCode": keys.BusinessShortCode,
+        "BusinessShortCode": config.BusinessShortCode,
         "Password": encoded,
         "Timestamp": formatted_time,
         "TransactionType": "CustomerPayBillOnline",
         "Amount": 1,
-        "PartyA": keys.Sender,
-        "PartyB": keys.BusinessShortCode,
-        "PhoneNumber": keys.Receiver,
+        "PartyA": config.Sender,
+        "PartyB": config.BusinessShortCode,
+        "PhoneNumber": config.Receiver,
         "CallBackURL": callback_url,
         "AccountReference": "CompanyXLTD",
         "TransactionDesc": "Payment of X"

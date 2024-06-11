@@ -59,4 +59,46 @@ def lipa_na_mpesa():
     response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', headers=headers, json=payload)
     print(response.text.encode('utf8'))
 
-lipa_na_mpesa()
+# lipa_na_mpesa() 
+
+def registerURL():
+    access_key = access_token()
+    headers = {
+  'Content-Type': 'application/json',
+  'Authorization': f'Bearer {access_key}'
+    }
+    # Generate the JWT token
+    jwt_token = generate_jwt_token()
+
+    # Modify the Callback URL here
+    callback_url = f"https://api.myapp.io/v1/results/12345?token={jwt_token}"
+    payload = {
+        "ShortCode": config.ShortCode,
+        "ResponseType": "Completed",
+        "ConfirmationURL": f"https://api.myapp.io/v1/results/12345?token={jwt_token}",
+        "ValidationURL": callback_url,
+    }
+
+    response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl', headers = headers, json = payload)
+    print(response.text.encode('utf8'))
+
+registerURL()
+def c2b():
+    access_key = access_token()
+    headers = {
+    'Content-Type': 'application/json',
+    'Authorization': f'Bearer {access_key}'
+    }
+
+    payload = {
+        "ShortCode": 600997,
+        "CommandID": "CustomerPayBillOnline",
+        "Amount": 100,
+        "Msisdn": 254705912645,
+        "BillRefNumber": "12345678",
+    }
+
+    response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate', headers = headers, json = payload)
+    print(response.text.encode('utf8'))
+
+c2b()

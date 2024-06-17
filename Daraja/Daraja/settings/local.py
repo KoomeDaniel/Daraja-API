@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +25,9 @@ SECRET_KEY = "django-insecure-7$7c6i+cy)cysy8@gw2b6&*v2u*uz1(#bo7i_ft-r3vj_$$2rs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'b121-62-8-86-201.ngrok-free.app',
+]
 
 
 # Application definition
@@ -76,9 +78,13 @@ WSGI_APPLICATION = "Daraja.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'daraja',  # Use the name of your database
+        'USER': 'root',  # Default XAMPP MySQL user is 'root'
+        'PASSWORD': '',  # Default XAMPP MySQL password is empty
+        'HOST': 'localhost',  # Default host for XAMPP MySQL
+        'PORT': '3306',  # Default port for XAMPP MySQL
     }
 }
 
@@ -117,7 +123,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+
 STATIC_URL = "static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR,"staticfiles")]
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static-cdn-local")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -131,3 +142,13 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ]
 }
+
+CORS_REPLACE_HTTPS_REFERER     =True
+HOST_SCHEME                    = "http://"
+SECURE_PROXY_SSL_HEADER        = None
+SECURE_SSL_REDIRECT            = True
+SESSION_COOKIE_SECURE          = True
+CSRF_COOKIE_SECURE             = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS =True
+SECURE_HSTS_SECONDS            = 1000000
+SECURE_FRAME_DENY              = True

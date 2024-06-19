@@ -2,7 +2,7 @@ import requests
 import json
 import base64
 from datetime import datetime, timedelta
-import config
+import samples.config as config
 import jwt
 
 def access_token():
@@ -11,18 +11,6 @@ def access_token():
     access_key = json_data.get('access_token')
     return access_key
 
-def generate_jwt_token():
-    # Create a payload with relevant claims (customize as needed)
-    payload = {
-        "sub": "user123",  # Example: User ID or relevant identifier
-        "exp": datetime.now() + timedelta(minutes=30)  # Example: Token expiration time
-    }
-
-    # Sign the token using your secret key
-    secret_key = "your_secret_key_here"  # Replace with your actual secret key
-    jwt_token = jwt.encode(payload, secret_key, algorithm="HS256")
-
-    return jwt_token
 
 def lipa_na_mpesa():
     access_key = access_token()
@@ -32,11 +20,9 @@ def lipa_na_mpesa():
 
     data_to_encode = config.BusinessShortCode + config.Passkey + formatted_time
     encoded = base64.b64encode(data_to_encode.encode()).decode('utf-8')
-    # Generate the JWT token
-    jwt_token = generate_jwt_token()
 
     # Modify the Callback URL here
-    callback_url = f"https://api.myapp.io/v1/results/12345?token={jwt_token}"
+    callback_url = f"https://055e-41-76-168-3.ngrok-free.app/api/payments/lnm"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {access_key}'

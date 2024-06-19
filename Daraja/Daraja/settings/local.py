@@ -26,7 +26,11 @@ SECRET_KEY = "django-insecure-7$7c6i+cy)cysy8@gw2b6&*v2u*uz1(#bo7i_ft-r3vj_$$2rs
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'b121-62-8-86-201.ngrok-free.app',
+    '055e-41-76-168-3.ngrok-free.app',
+]
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.ngrok.io',
+    'https://055e-41-76-168-3.ngrok-free.app',
 ]
 
 
@@ -41,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "rest_framework",
+    "mpesa",
 ]
 
 MIDDLEWARE = [
@@ -85,6 +90,9 @@ DATABASES = {
         'PASSWORD': '',  # Default XAMPP MySQL password is empty
         'HOST': 'localhost',  # Default host for XAMPP MySQL
         'PORT': '3306',  # Default port for XAMPP MySQL
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
     }
 }
 
@@ -146,7 +154,7 @@ REST_FRAMEWORK = {
 CORS_REPLACE_HTTPS_REFERER     =True
 HOST_SCHEME                    = "http://"
 SECURE_PROXY_SSL_HEADER        = None
-SECURE_SSL_REDIRECT            = True
+SECURE_SSL_REDIRECT            = False
 SESSION_COOKIE_SECURE          = True
 CSRF_COOKIE_SECURE             = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS =True

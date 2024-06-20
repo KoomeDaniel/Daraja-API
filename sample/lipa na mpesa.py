@@ -2,7 +2,7 @@ import requests
 import json
 import base64
 from datetime import datetime, timedelta
-import samples.config as config
+import sample.config as config
 import jwt
 
 def access_token():
@@ -22,7 +22,7 @@ def lipa_na_mpesa():
     encoded = base64.b64encode(data_to_encode.encode()).decode('utf-8')
 
     # Modify the Callback URL here
-    callback_url = f"https://055e-41-76-168-3.ngrok-free.app/api/payments/lnm"
+    callback_url = f"https://8e43-41-76-168-3.ngrok-free.app/api/payments/lnm"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {access_key}'
@@ -45,7 +45,7 @@ def lipa_na_mpesa():
     response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', headers=headers, json=payload)
     print(response.text.encode('utf8'))
 
-# lipa_na_mpesa() 
+lipa_na_mpesa() 
 
 def registerURL():
     access_key = access_token()
@@ -68,7 +68,7 @@ def registerURL():
     response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl', headers = headers, json = payload)
     print(response.text.encode('utf8'))
 
-registerURL()
+# registerURL()
 def c2b():
     access_key = access_token()
     headers = {
@@ -87,4 +87,4 @@ def c2b():
     response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate', headers = headers, json = payload)
     print(response.text.encode('utf8'))
 
-c2b()
+# c2b()

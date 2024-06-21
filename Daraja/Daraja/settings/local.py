@@ -26,11 +26,11 @@ SECRET_KEY = "django-insecure-7$7c6i+cy)cysy8@gw2b6&*v2u*uz1(#bo7i_ft-r3vj_$$2rs
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '8e43-41-76-168-3.ngrok-free.app',
+    'ca49-41-76-168-3.ngrok-free.app',
 ]
 CSRF_TRUSTED_ORIGINS = [
     'https://*.ngrok.io',
-    'https://8e43-41-76-168-3.ngrok-free.app',
+    'https://ca49-41-76-168-3.ngrok-free.app',
 ]
 
 
@@ -160,3 +160,5 @@ CSRF_COOKIE_SECURE             = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS =True
 SECURE_HSTS_SECONDS            = 1000000
 SECURE_FRAME_DENY              = True
+APPEND_SLASH                   = False
+

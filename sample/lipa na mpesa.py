@@ -2,7 +2,7 @@ import requests
 import json
 import base64
 from datetime import datetime, timedelta
-import sample.config as config
+import  config as config
 import jwt
 
 def access_token():
@@ -22,7 +22,7 @@ def lipa_na_mpesa():
     encoded = base64.b64encode(data_to_encode.encode()).decode('utf-8')
 
     # Modify the Callback URL here
-    callback_url = f"https://8e43-41-76-168-3.ngrok-free.app/api/payments/lnm"
+    callback_url = f"https://ca49-41-76-168-3.ngrok-free.app/api/payments/lnm/"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {access_key}'

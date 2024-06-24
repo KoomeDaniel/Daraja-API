@@ -22,7 +22,7 @@ def lipa_na_mpesa():
     encoded = base64.b64encode(data_to_encode.encode()).decode('utf-8')
 
     # Modify the Callback URL here
-    callback_url = f"https://ca49-41-76-168-3.ngrok-free.app/api/payments/lnm/"
+    callback_url = "https://e5ca-41-76-168-3.ngrok-free.app/api/payments/lnm/"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {access_key}'
@@ -33,7 +33,7 @@ def lipa_na_mpesa():
         "Password": encoded,
         "Timestamp": formatted_time,
         "TransactionType": "CustomerPayBillOnline",
-        "Amount": 1,
+        "Amount": 2,
         "PartyA": config.Sender,
         "PartyB": config.BusinessShortCode,
         "PhoneNumber": config.Receiver,

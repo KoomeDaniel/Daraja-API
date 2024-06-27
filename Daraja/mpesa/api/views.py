@@ -2,8 +2,8 @@ import logging
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from mpesa.models import LNMonline
-from mpesa.api.serializers import LNMonlineSerializer
+from mpesa.models import LNMonline,C2BPayments
+from mpesa.api.serializers import LNMonlineSerializer,C2BPaymentSerializer
 from datetime import datetime
 import pytz
 
@@ -77,3 +77,111 @@ class LNMCallbackUrlAPIView(CreateAPIView):
         except Exception as e:
             logger.error("Error processing callback: %s", str(e))
             return Response({"error": str(e)}, status=400)
+
+
+class C2BValidationAPIView(CreateAPIView):
+    queryset = C2BPayments.objects.all()
+    serializer_class = C2BPaymentSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request):
+        try:
+            logger.info("Received request.data in Validation: %s", request.data)
+            
+            # Extract necessary fields from the request data
+            transaction_type = request.data.get("TransactionType", "")
+            trans_id = request.data.get("TransID", "")
+            trans_time = request.data.get("TransTime", "")
+            trans_amount = request.data.get("TransAmount", "")
+            business_short_code = request.data.get("BusinessShortCode", "")
+            bill_ref_number = request.data.get("BillRefNumber", "")
+            invoice_number = request.data.get("InvoiceNumber", "")
+            org_account_balance = request.data.get("OrgAccountBalance", "")
+            third_party_trans_id = request.data.get("ThirdPartyTransID", "")
+            msisdn = request.data.get("MSISDN", "")
+            first_name = request.data.get("FirstName", "")
+            middle_name = request.data.get("MiddleName", "")
+            last_name = request.data.get("LastName", "")
+
+            # Parse the transaction date and time
+            trans_datetime = datetime.strptime(trans_time, "%Y%m%d%H%M%S")
+            aware_trans_datetime = pytz.utc.localize(trans_datetime)
+
+            # Create a new C2BPayments object
+            c2b_payment = C2BPayments.objects.create(
+                TransactionType=transaction_type,
+                TransID=trans_id,
+                TransTime=aware_trans_datetime,
+                TransAmount=trans_amount,
+                BusinessShortCode=business_short_code,
+                BillRefNumber=bill_ref_number,
+                InvoiceNumber=invoice_number,
+                OrgAccountBalance=org_account_balance,
+                ThirdPartyTransID=third_party_trans_id,
+                MSISDN=msisdn,
+                FirstName=first_name,
+                MiddleName=middle_name,
+                LastName=last_name,
+            )
+
+            logger.info("New C2BPayments instance created: %s", c2b_payment)
+
+            return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
+
+        except Exception as e:
+            logger.error("Error processing callback: %s", str(e))
+            return Response({"ResultCode": 1, "ResultDesc": str(e)}, status=400)
+
+
+class C2BConfirmationAPIView(CreateAPIView):
+    queryset = C2BPayments.objects.all()
+    serializer_class = C2BPaymentSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request):
+        try:
+            logger.info("Received request.data in Confirmation: %s", request.data)
+            
+            # Extract necessary fields from the request data
+            transaction_type = request.data.get("TransactionType", "")
+            trans_id = request.data.get("TransID", "")
+            trans_time = request.data.get("TransTime", "")
+            trans_amount = request.data.get("TransAmount", "")
+            business_short_code = request.data.get("BusinessShortCode", "")
+            bill_ref_number = request.data.get("BillRefNumber", "")
+            invoice_number = request.data.get("InvoiceNumber", "")
+            org_account_balance = request.data.get("OrgAccountBalance", "")
+            third_party_trans_id = request.data.get("ThirdPartyTransID", "")
+            msisdn = request.data.get("MSISDN", "")
+            first_name = request.data.get("FirstName", "")
+            middle_name = request.data.get("MiddleName", "")
+            last_name = request.data.get("LastName", "")
+
+            # Parse the transaction date and time
+            trans_datetime = datetime.strptime(trans_time, "%Y%m%d%H%M%S")
+            aware_trans_datetime = pytz.utc.localize(trans_datetime)
+
+            # Create a new C2BPayments object
+            c2b_payment = C2BPayments.objects.create(
+                TransactionType=transaction_type,
+                TransID=trans_id,
+                TransTime=aware_trans_datetime,
+                TransAmount=trans_amount,
+                BusinessShortCode=business_short_code,
+                BillRefNumber=bill_ref_number,
+                InvoiceNumber=invoice_number,
+                OrgAccountBalance=org_account_balance,
+                ThirdPartyTransID=third_party_trans_id,
+                MSISDN=msisdn,
+                FirstName=first_name,
+                MiddleName=middle_name,
+                LastName=last_name,
+            )
+
+            logger.info("New C2BPayments instance created: %s", c2b_payment)
+
+            return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
+
+        except Exception as e:
+            logger.error("Error processing callback: %s", str(e))
+            return Response({"ResultCode": 1, "ResultDesc": str(e)}, status=400)

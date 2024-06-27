@@ -6,7 +6,11 @@ import  config as config
 import jwt
 
 def access_token():
-    response = requests.request("GET", 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', headers={'Authorization': 'Basic cFJZcjZ6anEwaThMMXp6d1FETUxwWkIzeVBDa2hNc2M6UmYyMkJmWm9nMHFRR2xWOQ=='})
+    try:
+        response = requests.request("GET", 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', headers={'Authorization': 'Basic cFJZcjZ6anEwaThMMXp6d1FETUxwWkIzeVBDa2hNc2M6UmYyMkJmWm9nMHFRR2xWOQ=='})
+    except:
+         response = requests.request("GET", 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', headers={'Authorization': 'Basic cFJZcjZ6anEwaThMMXp6d1FETUxwWkIzeVBDa2hNc2M6UmYyMkJmWm9nMHFRR2xWOQ=='},verify=False)
+    
     json_data = json.loads(response.text)
     access_key = json_data.get('access_token')
     return access_key
@@ -22,7 +26,7 @@ def lipa_na_mpesa():
     encoded = base64.b64encode(data_to_encode.encode()).decode('utf-8')
 
     # Modify the Callback URL here
-    callback_url = "https://e5ca-41-76-168-3.ngrok-free.app/api/payments/lnm/"
+    callback_url = "https://f609-62-8-86-201.ngrok-free.app/api/payments/lnm/"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {access_key}'
@@ -45,7 +49,7 @@ def lipa_na_mpesa():
     response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', headers=headers, json=payload)
     print(response.text.encode('utf8'))
 
-lipa_na_mpesa() 
+# lipa_na_mpesa() 
 
 def registerURL():
     access_key = access_token()
@@ -53,22 +57,23 @@ def registerURL():
   'Content-Type': 'application/json',
   'Authorization': f'Bearer {access_key}'
     }
-    # Generate the JWT token
-    jwt_token = generate_jwt_token()
 
     # Modify the Callback URL here
-    callback_url = f"https://api.myapp.io/v1/results/12345?token={jwt_token}"
+    callback_url = "https://f609-62-8-86-201.ngrok-free.app/api/payments/c2b-validation/"
     payload = {
         "ShortCode": config.ShortCode,
         "ResponseType": "Completed",
-        "ConfirmationURL": f"https://api.myapp.io/v1/results/12345?token={jwt_token}",
+        "ConfirmationURL": "https://f609-62-8-86-201.ngrok-free.app/api/payments/c2b-confirmation/",
         "ValidationURL": callback_url,
     }
+    try:
+        response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl', headers = headers, json = payload)
+    except:
+        response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl', headers = headers, json = payload, verify=False)
 
-    response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl', headers = headers, json = payload)
     print(response.text.encode('utf8'))
 
-# registerURL()
+registerURL()
 def c2b():
     access_key = access_token()
     headers = {
@@ -83,8 +88,11 @@ def c2b():
         "Msisdn": 254705912645,
         "BillRefNumber": "12345678",
     }
+    try:
+        response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate', headers = headers, json = payload)
+    except:
+        response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate', headers = headers, json = payload, verify=False)
 
-    response = requests.request("POST", 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate', headers = headers, json = payload)
     print(response.text.encode('utf8'))
 
-# c2b()
+c2b()
